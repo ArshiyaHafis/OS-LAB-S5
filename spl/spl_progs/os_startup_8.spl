@@ -16,8 +16,7 @@ loadi(23,36);
 loadi(2, 15);
 loadi(3, 16);
 
-
-//load the timer interupt routine
+//load timer
 loadi(4, 17);
 loadi(5, 18);
 
