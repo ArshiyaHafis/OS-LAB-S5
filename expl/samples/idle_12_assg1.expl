@@ -2,12 +2,14 @@ int main()
 {
 	decl
 		int i, temp;
+		string b;
 	enddecl
 	
 	begin
 		i=101;
 		while(i<=200) do
-			temp = exposcall("Write", -2, i);
+			b="p";
+			temp = exposcall("Write", -2, b);
 			i=i+1;
 		endwhile;
 		return 0;
