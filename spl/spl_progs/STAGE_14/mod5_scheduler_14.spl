@@ -29,14 +29,12 @@ endwhile;
 new_process_table = PROCESS_TABLE + newPID * 16;
 
 
-SP =  [new_process_table + 11] * 512 + [new_process_table + 12] ;
-
-//prepare for new process
-PTBR = [new_process_table + 14];
-PTLR = [new_process_table + 15];
+SP =  [new_process_table + 11] * 512 + [new_process_table + 12] ;		//sp = Uareapgno*512 + kptr
+PTBR = [new_process_table + 14];						//new process PTBR
+PTLR = [new_process_table + 15];						//new process PTLR
 
 //update new pid in system status table
-[SYSTEM_STATUS_TABLE + 1] = newPID;
+[SYSTEM_STATUS_TABLE + 1] = newPID;						//currentPID updated
 
 
 if([new_process_table + 4] == CREATED) then

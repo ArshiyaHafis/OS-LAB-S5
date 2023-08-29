@@ -1,11 +1,11 @@
-// Setting the current program to terminated
+// Setting the current process to terminated
 [ PROCESS_TABLE+[SYSTEM_STATUS_TABLE + 1]*16+4] = TERMINATED;
 
-// Find out whether all processes except idle are terminated. In that case, halt the system.Otherwise invoke the scheduler
+// check processes except idle are terminated
 alias i R5;
 i = 1;
 while(i <  16) do
-    if (([PROCESS_TABLE +16*i+ 4] == CREATED) || ([PROCESS_TABLE +16*i+ 4] == READY)) then
+    if (([PROCESS_TABLE +16*i+ 4] == CREATED) || ([PROCESS_TABLE +16*i+ 4] == READY)) then		//if not terminated call scheduler
        call MOD_5;
        SP = [PROCESS_TABLE + ( [SYSTEM_STATUS_TABLE + 1] * 16) + 13];
        [PROCESS_TABLE + [SYSTEM_STATUS_TABLE + 1]*16 + 9]=0; // MODE
@@ -13,4 +13,4 @@ while(i <  16) do
     endif;
     i=i+1;
 endwhile;
-halt;	
+halt;				//if all terminated then halt
