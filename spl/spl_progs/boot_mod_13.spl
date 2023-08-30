@@ -1,21 +1,6 @@
-//load library code form disk to memory
-loadi(63,13);
-loadi(64,14);
-
-//load init program
-loadi(65,7);
-loadi(66,8);
-
-
-//load int10 module
-loadi(22,35);
-loadi(23,36);
-
-
 //load exception handler
 loadi(2, 15);
 loadi(3, 16);
-
 
 //load the timer interupt routine
 loadi(4, 17);
@@ -24,6 +9,18 @@ loadi(5, 18);
 //load int7
 loadi(16,29);
 loadi(17,30);
+
+//load int10 module
+loadi(22,35);
+loadi(23,36);
+
+//load library code form disk to memory
+loadi(63,13);
+loadi(64,14);
+
+//load init program
+loadi(65,7);
+loadi(66,8);
 
 
 //init program

@@ -8,8 +8,8 @@ int main()
 	begin
 		i=101;
 		while(i<=200) do
-			b="p";
-			temp = exposcall("Write", -2, b);
+			//b="p";
+			temp = exposcall("Write", -2, i);
 			i=i+1;
 		endwhile;
 		return 0;
