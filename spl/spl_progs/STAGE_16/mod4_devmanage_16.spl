@@ -25,9 +25,7 @@ if (functionNum == 4) then
 	R2 = currentPID;
 	call MOD_0;
 	multipop(R1, R2, R3);
-	
 	read;
-	
 	[PROCESS_TABLE + (currentPID * 16) + 4] = WAIT_TERMINAL;
 	
 	//context switch module

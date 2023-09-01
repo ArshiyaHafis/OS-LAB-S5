@@ -7,8 +7,9 @@ reqPID = [TERMINAL_STATUS_TABLE+1];
 
 alias reqProcessTableEntry R1;
 reqProcessTableEntry = PROCESS_TABLE + 16 * reqPID;
+breakpoint;
 [reqProcessTableEntry+8] =  P0;				//store input value in input buffer in process table
-
+breakpoint;
 
 //release the terminal
 multipush(R0, R1);

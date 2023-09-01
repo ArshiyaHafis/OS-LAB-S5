@@ -1,4 +1,4 @@
-load --int=timer $HOME/myexpos/spl/spl_progs/scheduler_12_assg2.xsm
+load --int=timer $HOME/myexpos/spl/spl_progs/scheduler_12.xsm
 load --os $HOME/myexpos/spl/spl_progs/os_startup_13.xsm
 load --init $HOME/myexpos/expl/samples/num_100.xsm
 load --int=10 ../spl/spl_progs/haltprog.xsm

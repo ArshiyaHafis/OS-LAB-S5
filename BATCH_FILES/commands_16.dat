@@ -1,6 +1,6 @@
 load --int=timer $HOME/myexpos/spl/spl_progs/STAGE_14/timer_int_14.xsm
 load --os $HOME/myexpos/spl/spl_progs/STAGE_14/os_startup_14.xsm
-load --init ../expl/expl_progs/gcd.xsm
+load --init ../expl/expl_progs/bubble_sort.xsm
 load --int=10 ../spl/spl_progs/STAGE_14/int10_14.xsm
 load --exhandler ../spl/spl_progs/haltprog.xsm
 load --library ../expl/library.lib
