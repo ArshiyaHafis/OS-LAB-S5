@@ -16,6 +16,7 @@ alias newPID R2;
 newPID =0;				//idle process
 i =  [SYSTEM_STATUS_TABLE+1]+1; 	//current id +1
 
+//print "scheduler";
 while(i<16) do
     process_table_entry = PROCESS_TABLE + i * 16;
     if(([process_table_entry + 4] == READY) || ([process_table_entry + 4] == CREATED) ) then
@@ -28,6 +29,7 @@ endwhile;
 
 new_process_table = PROCESS_TABLE + newPID * 16;
 
+//print newPID;
 
 SP =  [new_process_table + 11] * 512 + [new_process_table + 12] ;		//sp = Uareapgno*512 + kptr
 PTBR = [new_process_table + 14];						//new process PTBR
@@ -47,4 +49,5 @@ endif;
 
 [new_process_table + 4] = RUNNING;			//new process = running
 multipop(BP);						//bp of new process
+//print "return";
 return;

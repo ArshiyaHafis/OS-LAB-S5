@@ -7,6 +7,7 @@ loadi(55, 68);
 loadi(63,13);
 loadi(64,14);
 
+print "os startup";
 //load init program
 loadi(65,7);
 loadi(66,8);
@@ -34,6 +35,7 @@ loadi(70,12);
 
 SP = [PROCESS_TABLE + 11]*512 - 1;
 
+print "boot module";
 call BOOT_MODULE;
 
 //IDLE PROGRAM

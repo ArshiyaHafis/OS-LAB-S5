@@ -4,7 +4,7 @@ load --int=10 ../spl/spl_progs/STAGE_14/int10_14.xsm
 load --int=6 ../spl/spl_progs/STAGE_16/int6_16.xsm
 load --int=7 ../spl/spl_progs/STAGE_15/int7_15.xsm
 load --int=9 ../spl/spl_progs/STAGE_17/int9_17.xsm
-load --int=console ../spl/spl_progs/STAGE_16/console_int_handler.xsm
+load --int=console ../spl/spl_progs/STAGE_16/console_int_handler_16.xsm
 load --int=timer $HOME/myexpos/spl/spl_progs/STAGE_14/timer_int_14.xsm
 load --exhandler ../spl/spl_progs/haltprog.xsm
 load --library ../expl/library.lib

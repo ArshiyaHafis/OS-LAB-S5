@@ -32,6 +32,7 @@ if (functionNum == 4) then
 	
 	multipush(R1,R2,R3);
 	call MOD_5;
+	print "dev manage";
 	multipop(R1,R2,R3);
 	
 	alias physicalAddr R4;
