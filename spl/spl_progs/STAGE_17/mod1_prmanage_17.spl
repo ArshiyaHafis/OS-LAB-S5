@@ -1,25 +1,28 @@
 alias functionNo R1;
 alias currentPID R2;
 
+
+
+//free user area page
 if(functionNo == 2) then
 	alias userAreapg R3;
-	userAreapg = [PROCESS_TABLE + (currentPID * 16) + 11];
+	userAreapg = [PROCESS_TABLE + (currentPID * 16) + 11];				//get uApg from process table
 	
 	multipush(R1,R2);
 	R1 = 2;
 	R2 = userAreapg;
 	call MOD_2;
-	multipop(R1,R2);
+	multipop(R1,R2);								//invoke release page
 	
 	return;
 	
 endif;
 
-if(functionNo == 3) then
+if(functionNo == 3) then								//exit process
 	multipush(R1,R2);
 	R1 = 4;
 	R2 = currentPID;
-	call MOD_1;
+	call MOD_1;									//free page table
 	multipop(R1,R2);
 	
 	
@@ -27,14 +30,14 @@ if(functionNo == 3) then
 	R1 = 2;
 	R2 = currentPID;
 	call MOD_1;
-	multipop(R1,R2);
+	multipop(R1,R2);								//free user area page
 	
 	[PROCESS_TABLE + (currentPID * 16) + 4] = TERMINATED;
 	return;
 	
 endif;
 
-if(functionNo == 4) then
+if(functionNo == 4) then								//free page table
 	alias ptbr R3;
 	ptbr = [PROCESS_TABLE + currentPID*16 + 14];
 	[ptbr + 0] = -1;

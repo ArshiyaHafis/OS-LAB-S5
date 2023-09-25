@@ -53,6 +53,7 @@ else
 			[ptbr + 2*i + 4] = R0;
 			[ptbr + 2*i + 5] = "0110";
 			i = i + 1;
+			print R0;
 		endwhile;
 	endif;
 	

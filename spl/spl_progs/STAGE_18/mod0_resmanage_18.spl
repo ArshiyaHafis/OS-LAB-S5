@@ -3,7 +3,7 @@ alias currentPID R2;
 
 
 if (functionNum == 3) then									//acquire disk
-	while([TERMINAL_STATUS_TABLE] == 1) do
+	while([DISK_STATUS_TABLE] == 1) do
 		[PROCESS_TABLE + 16*currentPID + 4] = WAIT_DISK;
 		multipush(R1, R2);
 		call SCHEDULER;

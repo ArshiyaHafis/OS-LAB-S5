@@ -16,3 +16,5 @@ load --module 4 ../spl/spl_progs/STAGE_16/mod4_devmanage_16.xsm
 load --module 5 ../spl/spl_progs/STAGE_14/mod5_scheduler_14.xsm
 load --module 7 ../spl/spl_progs/STAGE_17/boot_mod_17.xsm
 load --exec ../expl/expl_progs/100odd.xsm
+load --exec ../expl/samples/num_100.xsm
+load --exec ../expl/samples/primes.xsm

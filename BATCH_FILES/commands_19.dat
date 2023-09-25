@@ -20,3 +20,5 @@ load --exec ../expl/expl_progs/100odd.xsm
 load --exec ../expl/expl_progs/l_list.xsm
 load --exec ../expl/samples/primes.xsm
 load --exec ../expl/samples/100even.xsm
+load --exec ../expl/expl_progs/arith.xsm
+load --exec ../expl/expl_progs/check.xsm
