@@ -31,7 +31,7 @@ if(sysCallNo == 17) then 		//semget
         i = i + 1;
     endwhile;
 
-    if (semId == -1 ) then
+    if (semId == -1 ) then		//no free entry
         [returnAddress] = -1;
         [pTable + 9] = 0;
         SP = [pTable + 13];
@@ -63,7 +63,7 @@ endif;
 
 
 
-if(sysCallNo == 18) then 
+if(sysCallNo == 18) then 						//sem release
     alias semId R5;
     semId = [[PTBR + 2*((userSP-4)/512)] * 512 + ((userSP-4)%512)] ;
 
@@ -77,7 +77,7 @@ if(sysCallNo == 18) then
         ireturn;
     endif;
 
-    multipush(R1,R2,R3,R4,R5,R6);
+    multipush(R1,R2,R3,R4,R5,R6);				//release acquired semaphore
     R1 = 7;
     R2 = [ppTable+1]; // Semaphore Table Index
     R3  = [SYSTEM_STATUS_TABLE+1]; // PID

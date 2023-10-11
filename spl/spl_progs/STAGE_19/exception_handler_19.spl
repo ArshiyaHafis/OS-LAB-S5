@@ -4,10 +4,10 @@
 SP = [PROCESS_TABLE + ([SYSTEM_STATUS_TABLE + 1] * 16) + 11] * 512 - 1;			// Setting SP to UArea Page number * 512 - 1
 backup;
 multipush(EIP);
-alias userSP R1;
+alias userSP R6;
 userSP = [PROCESS_TABLE + ( [SYSTEM_STATUS_TABLE + 1] * 16) + 13];
 
-if(EC != 0 || userSP == [PROCESS_TABLE + ([SYSTEM_STATUS_TABLE + 1] * 16) + 15] * 512 - 1) then
+if(EC != 0 || userSP == (([PROCESS_TABLE + ([SYSTEM_STATUS_TABLE + 1] * 16) + 15] * 512) - 1)) then
 	print "ERROR";
 	if (EC == 1) then
 		//print EIP;
@@ -24,54 +24,46 @@ if(EC != 0 || userSP == [PROCESS_TABLE + ([SYSTEM_STATUS_TABLE + 1] * 16) + 15] 
 	
 	//invoke exit process
 	//print "exit";
-	multipush(R0);
+	multipush(R0,R1,R2,SP,PTBR,PTLR);
 	R1 = 3;
 	R2 = [SYSTEM_STATUS_TABLE + 1];
 	call MOD_1;
-	multipop(R0);
+	multipop(R0,R1,R2,SP,PTBR,PTLR);
 	
 	//print R0;
 	//print "call scheduler";
+	multipush(R0,R1,R2,SP,PTBR,PTLR);
 	call MOD_5;
+	multipush(R0,R1,R2,SP,PTBR,PTLR);
 	//print "exit";
 
-else
-	print "page fault";
-	//for heap page
-	alias i R1;
-	alias ptbr R2;
-	ptbr = [PROCESS_TABLE + ([SYSTEM_STATUS_TABLE + 1] * 16) + 14];
-	if(EPN == 2 || EPN == 3) then
-		print "heap";
-		i=0;
-		while(i<2) do
-			multipush(R1, R2);
-			R1 = 1;
-			call MOD_2;
-			multipop(R1, R2);
-			
-			[ptbr + 2*i + 4] = R0;
-			[ptbr + 2*i + 5] = "0110";
-			i = i + 1;
-			print R0;
-		endwhile;
-	endif;
-	
-	
-	
-	//for code page
-	if ( EPN >= 4 && EPN <=7) then
-		print EPN;
-		print "code";
-		multipush(R0, R1, R2);
-		R1 = 5;
-		R2 = [DISK_MAP_TABLE + ([SYSTEM_STATUS_TABLE + 1]*10) + EPN];
-		call MOD_2;
-		//R3 = R0;
-		multipop(R0, R1, R2);
-		[ptbr + EPN*2] = R0;
-		[ptbr + EPN*2 + 1] = "1100";
-	endif;
+endif;
+
+if ( EC == 0 ) then 
+    if ( EPN == 4 || EPN == 5 || EPN == 6 || EPN == 7)then
+        multipush(R0,R1,R2);
+        R1 = 5;
+        R2 = [ DISK_MAP_TABLE + [SYSTEM_STATUS_TABLE + 1]*10 + EPN];
+        // R3 = [SYSTEM_STATUS_TABLE + 1];
+        call MEMORY_MANAGER;
+        [PTBR + EPN*2]  = R0;
+        [PTBR + EPN*2 + 1] = "1100";
+        multipop(R0,R1,R2);
+    else
+        // breakpoint;
+        
+        multipush(R0,R1,R2,R3);
+        R1 = 1;
+        call MEMORY_MANAGER;
+        [PTBR + 4]  = R0;
+        [PTBR + 5]  = "1110";
+
+        R1 = 1;
+        call MEMORY_MANAGER;
+        [PTBR + 6]  = R0;
+        [PTBR + 7]  = "1110";
+        multipop(R0,R1,R2,R3);
+    endif;
 endif;
 	
 //print "doe";
@@ -82,6 +74,7 @@ restore;
 SP = [PROCESS_TABLE + ([SYSTEM_STATUS_TABLE + 1] * 16) + 13];
 SP = SP + 1;
 [[[PROCESS_TABLE + ([SYSTEM_STATUS_TABLE + 1] * 16) + 14] + 2*((SP)/512)] * 512 + ((SP)%512)] = EIP;
+print "bwhah";
 	
 	
 	
