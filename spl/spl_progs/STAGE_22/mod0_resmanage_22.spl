@@ -26,12 +26,12 @@ if (functionNum == 8) then
 	return;
 endif;
 
-if( functionNum == 6) then
+if( functionNum == 6) then							//acquire semaphore
 	alias i R3;
 	alias semTable R4;
 	alias freeSem R5;
 	freeSem=-1;
-	while( i< 32) do
+	while( i< 32) do							//check free entry in semaphore table
 		semTable = SEMAPHORE_TABLE + (i*4);
 		if ([semTable + 1] == 0) then
 			freeSem = i;
@@ -48,16 +48,16 @@ if( functionNum == 6) then
 endif;
 
 
-if( functionNum == 7) then
+if( functionNum == 7) then							//release semaphore
 	alias semID R2;
 	alias currentPID R3;
 	alias semTable R4;
 	semTable = SEMAPHORE_TABLE + (semID * 4);
-	if([semTable] == currentPID) then
+	if([semTable] == currentPID) then					//check if current process is the process that locked the sempahore
 		[semTable] = -1;
 		alias i R5;
 		i=0;
-		while(i<16) do
+		while(i<16) do							//change (wait) to (ready)
 			if(([PROCESS_TABLE +16*i+ 4] == WAIT_SEMAPHORE && [PROCESS_TABLE +16*i+ 5] == semTable )) then
 				[PROCESS_TABLE + (16*i) + 4] = READY;
 			endif;

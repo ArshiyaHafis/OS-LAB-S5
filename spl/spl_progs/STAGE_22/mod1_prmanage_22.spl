@@ -25,13 +25,13 @@ if(functionNo == 1) then
    	return;
 endif;
 
-if(functionNo == 2) then
+if(functionNo == 2) then									//free user area page
 	alias userAreapg R3;
 	userAreapg = [PROCESS_TABLE + (currentPID * 16) + 11];
 	
 	alias i R4;
 	i=0;
-	while(i<8) do
+	while(i<8) do										//invoke release sempahore for all the terminated processes
 		if([(userAreapg * 512) + 496 + (2 * i)] == SEMAPHORE) then
 			multipush(R1, R2, R3, R4);
 			R1 = 7;
