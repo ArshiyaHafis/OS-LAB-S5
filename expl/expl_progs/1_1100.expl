@@ -26,6 +26,7 @@ int main()
 		while(a != -2) do
 			temp = exposcall("Read",fileDesc,data);
 			temp = exposcall("Write",-2,data);
+			
 			a = exposcall("Seek",fileDesc,-2);
 		endwhile;
 		

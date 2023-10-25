@@ -45,7 +45,7 @@ if(sysCallNo == 2) then 					//  Open
     multipush(R1,R2,R3,R4,R5,R6,R7);				//open function in file manager module
     R1 = OPEN;
     R2 = fileName;
-    call FILE_MANAGER;
+    call MOD_3;
     multipop(R1,R2,R3,R4,R5,R6,R7);
 
     if(R0 == -1 || R0 == -2 || R0 == -3) then			//error codes
@@ -70,7 +70,7 @@ if(sysCallNo == 3) then 				// Close
             ireturn;
     endif;
 
-    alias pprTableEntry R5;
+    alias pprTableEntry R6;							//get per process resource entry
     pprTableEntry = [pTable + 11] * 512 + RESOURCE_TABLE_OFFSET+ 2*fd;
  
     if([pprTableEntry] != FILE) then
@@ -80,13 +80,13 @@ if(sysCallNo == 3) then 				// Close
             ireturn;
     endif;
 
-    multipush(R1,R2,R3,R4,R5,R6,R7);
+    multipush(R1,R2,R3,R4,R5,R6,R7);						//call CLOSE in file manager module
     R1 = CLOSE;
     R2 = [pprTableEntry+1];
-    call FILE_MANAGER;
+    call MOD_3;
     multipop(R1,R2,R3,R4,R5,R6,R7);
 
-    [pprTableEntry] = -1;
+    [pprTableEntry] = -1;							//invalidate per process resource entry
     [returnAddress] = 0;
 endif;
 

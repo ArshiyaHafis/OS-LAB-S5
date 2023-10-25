@@ -1,38 +1,21 @@
 
 alias userSP R1;
-alias processTableEntryAddress R3;
-processTableEntryAddress = PROCESS_TABLE + [SYSTEM_STATUS_TABLE+1]*16;
-// Save the user stack pointer in the process table
-[processTableEntryAddress + 13]= SP;
+alias pTable R3;
+pTable = PROCESS_TABLE + [SYSTEM_STATUS_TABLE+1]*16;
+[pTable + 13]= SP;
+SP = [pTable + 11] * 512  - 1 ;
+PTBR = [pTable + 14] ;
+userSP = [pTable + 13];
+[pTable + 9] = 21;
 
-// switch to the kernel stack
-SP = [processTableEntryAddress + 11] * 512  - 1 ;
-PTBR = [processTableEntryAddress + 14] ;
-
-userSP = [processTableEntryAddress + 13];
-
-// Change the MODE FLAG in the process tableto the system call number.
-[processTableEntryAddress + 9] = 21;
-
-// Shutdown system call can be invoked only from the shell process of the root user. If the current process is not shell (PID in the process table is not equal to 1) or the current user is not root user (USERID in the process table is not equal to 1) then store -1 as return value, reset the MODE FLAG, change the stack to user stack and return to user mode.
-if ([processTableEntryAddress + 1] != 1 || [processTableEntryAddress + 3] != 1) then
-    
-     //  return to the user mode with -1 stored as return value indicating failure.
+if ([pTable + 1] != 1 || [pTable + 3] != 1) then
     [[PTBR + 2*((userSP-1)/512)] * 512 + ((userSP-1)%512)] = -1;
-
-    // At any point of return to user, remember to reset the MODE FLAG and change the stack to user stack.
-    [processTableEntryAddress + 9] = 0;
-    SP = [processTableEntryAddress + 13];
+    [pTable + 9] = 0;
+    SP = [pTable + 13];
     ireturn;
 endif;
 
 
-// Final Version Commit the inode table, root file, user table and disk free list to the disk by calling the disk_store() function in the Device Manager Module.
-
-
-// Commit the changes made in the memory copies of the inode table (along with user table), the root file and the disk free list by storing them back to the disk invoking the Disk Store function of device manager module . 
-// Refer to disk/memory organization for block and page numbers of these data structures.
-// DISK_STORE arguements PID, Page Number, Block Number	
 
 multipush(R1,R2,R3);
 //inode table
@@ -76,34 +59,24 @@ call PROCESS_MANAGER;
 multipop(R1,R2,R3);
 
 
-// Loop through the Buffer Table
-//     If the buffer is dirty
-//        Commit changes to the disk by calling the disk_store() function in the Device Manager module.
-
-alias bufferTableEntryAddress R4;
-alias bufferNumber R5;
-bufferNumber = 0;
-while (bufferNumber < MAX_BUFFER) do
-    bufferTableEntryAddress = BUFFER_TABLE + bufferNumber * 4;
+alias bTable R4;
+alias bNo R5;
+bNo = 0;
+while (bNo < MAX_BUFFER) do
+    bTable = BUFFER_TABLE + bNo * 4;
     
-    // if the buffer is dirty
-    
-    if ([bufferTableEntryAddress + 1] == 1) then
-        multipush(R1,R2,R3,R4,R5);
-        // Arguements are PID, Page Number, Block Number	
+    if ([bTable + 1] == 1) then
+        multipush(R1,R2,R3,R4,R5);	
         R1 = DISK_STORE;
         R2 = [SYSTEM_STATUS_TABLE+1]; //  PID
-        R3 = BUFFER_BASE + bufferNumber; // Page Number
-        R4 = [bufferTableEntryAddress]; // Block Number
+        R3 = BUFFER_BASE + bNo; // Page Number
+        R4 = [bTable]; // Block Number
         call DEVICE_MANAGER;
         multipop(R1,R2,R3,R4,R5);
-
-        // Mark the buffer as clean in the corresponding buffer table entry (reset dirty bit)
-        [bufferTableEntryAddress + 1] = 0;
+        
+        [bTable + 1] = 0;
     endif;
-    bufferNumber = bufferNumber + 1;
+    bNo = bNo + 1;
 endwhile;
 
-
-// Finally, halt the system using the SPL statement halt.
 halt;
